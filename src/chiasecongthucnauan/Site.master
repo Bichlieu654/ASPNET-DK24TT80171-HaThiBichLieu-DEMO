@@ -1,0 +1,116 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Chia sẻ và khám phá hàng ngàn công thức nấu ăn ngon từ cộng đồng." />
+    <title>Bếp mẹ Ớt – Chia Sẻ Công Thức Nấu Ăn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="<%=ResolveUrl("~/Assets/css/style.css") %>" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+
+<!-- =================== NAVBAR =================== -->
+<nav class="navbar">
+    <div class="navbar-inner">
+        <!-- Logo -->
+        <a href="<%=ResolveUrl("~/Default.aspx") %>" class="navbar-brand">
+            <span class="brand-icon">🍳</span>
+            Bếp mẹ <em>Ớt</em>
+        </a>
+
+        <!-- Search Box -->
+        <div class="navbar-search">
+            <form action="<%=ResolveUrl("~/Recipes.aspx") %>" method="get">
+                <input type="text" name="q" placeholder="Tìm kiếm công thức..." value="<%=Request.QueryString["q"] %>" />
+                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+
+        <!-- Nav Links -->
+        <div class="navbar-links">
+            <a href="<%=ResolveUrl("~/Default.aspx") %>" class="nav-link">
+                <i class="fas fa-home"></i> Trang chủ
+            </a>
+            <a href="<%=ResolveUrl("~/Recipes.aspx") %>" class="nav-link">
+                <i class="fas fa-utensils"></i> Công thức
+            </a>
+
+            <% if (Session["UserID"] != null) { %>
+                <a href="<%=ResolveUrl("~/AddRecipe.aspx") %>" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Đăng công thức
+                </a>
+                <div class="user-menu">
+                    <button class="user-avatar-btn">
+                        <span class="avatar-circle"><%=Session["Username"] != null ? Session["Username"].ToString().Substring(0,1).ToUpper() : "U" %></span>
+                        <%=Session["FullName"] ?? Session["Username"] %>
+                        <i class="fas fa-chevron-down" style="font-size:0.7rem;"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="<%=ResolveUrl("~/Profile.aspx") %>">
+                            <i class="fas fa-user"></i> Trang cá nhân
+                        </a>
+                        <a href="<%=ResolveUrl("~/Profile.aspx?tab=recipes") %>">
+                            <i class="fas fa-book-open"></i> Công thức của tôi
+                        </a>
+                        <div class="divider"></div>
+                        <a href="<%=ResolveUrl("~/Logout.aspx") %>">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            <% } else { %>
+                <a href="<%=ResolveUrl("~/Login.aspx") %>" class="btn-nav-login">Đăng nhập</a>
+                <a href="<%=ResolveUrl("~/Register.aspx") %>" class="btn-nav-register">Đăng ký</a>
+            <% } %>
+        </div>
+    </div>
+</nav>
+
+<!-- =================== PAGE CONTENT =================== -->
+<form id="formMain" runat="server" enctype="multipart/form-data">
+<div class="page-wrapper">
+    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+</div>
+</form>
+
+<!-- =================== FOOTER =================== -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="brand-name">🍳 Bếp mẹ Ớt</div>
+                <p>Nơi chia sẻ đam mê ẩm thực – khám phá hàng ngàn công thức nấu ăn ngon từ cộng đồng người Việt yêu bếp.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Danh mục</h4>
+                <a href="<%=ResolveUrl("~/Recipes.aspx?cat=Món+chính") %>">🍲 Món chính</a>
+                <a href="<%=ResolveUrl("~/Recipes.aspx?cat=Tráng+miệng") %>">🍮 Tráng miệng</a>
+                <a href="<%=ResolveUrl("~/Recipes.aspx?cat=Ăn+chay") %>">🥗 Ăn chay</a>
+                <a href="<%=ResolveUrl("~/Recipes.aspx?cat=Khai+vị") %>">🥘 Khai vị</a>
+                <a href="<%=ResolveUrl("~/Recipes.aspx?cat=Ăn+vặt") %>">🍢 Ăn vặt</a>
+                <a href="<%=ResolveUrl("~/Recipes.aspx?cat=Đồ+uống") %>">🥤 Đồ uống</a>
+            </div>
+            <div class="footer-col">
+                <h4>Liên kết</h4>
+                <a href="<%=ResolveUrl("~/Default.aspx") %>">Trang chủ</a>
+                <a href="<%=ResolveUrl("~/Recipes.aspx") %>">Tất cả công thức</a>
+                <% if (Session["UserID"] != null) { %>
+                    <a href="<%=ResolveUrl("~/AddRecipe.aspx") %>">Đăng công thức</a>
+                    <a href="<%=ResolveUrl("~/Profile.aspx") %>">Trang cá nhân</a>
+                <% } else { %>
+                    <a href="<%=ResolveUrl("~/Register.aspx") %>">Đăng ký miễn phí</a>
+                    <a href="<%=ResolveUrl("~/Login.aspx") %>">Đăng nhập</a>
+                <% } %>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 <span>Bếp mẹ Ớt</span>. Được làm bởi SV Hà Thị Bích Liễu - Đồ án môn học</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
